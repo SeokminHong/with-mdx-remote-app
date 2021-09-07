@@ -1,9 +1,6 @@
-import { setCookie } from 'nookies';
+import { getLocale, setLocale } from "../utils/locale";
 
-setCookie(null, 'my-lang', 'ko', {
-  maxAge: 30 * 24 * 60 * 60,
-  path: '/',
-});
+setLocale(getLocale());
 
 export default function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;

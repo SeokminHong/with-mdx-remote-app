@@ -1,6 +1,16 @@
+import { getNextLocale, setLocale } from "../utils/locale";
+
+const changeLocale = () => {
+  setLocale(getNextLocale());
+  history.go(0);
+};
+
 export default function Layout({ children }) {
   return (
     <>
+      <div>
+        <button onClick={changeLocale}>Change Locale</button>
+      </div>
       <div className="wrapper">{children}</div>
       <style jsx>{`
         .wrapper {
@@ -41,9 +51,9 @@ export default function Layout({ children }) {
         }
 
         code {
-          font-family: 'Menlo';
+          font-family: "Menlo";
         }
       `}</style>
     </>
-  )
+  );
 }
