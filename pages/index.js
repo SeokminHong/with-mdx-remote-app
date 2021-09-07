@@ -1,9 +1,9 @@
-import fs from 'fs'
-import matter from 'gray-matter'
-import Link from 'next/link'
-import path from 'path'
-import Layout from '../components/Layout'
-import { postFilePaths, POSTS_PATH } from '../utils/mdxUtils'
+import fs from 'fs';
+import matter from 'gray-matter';
+import Link from 'next/link';
+import path from 'path';
+import Layout from '../components/Layout';
+import { postFilePaths, POSTS_PATH } from '../utils/mdxUtils';
 
 export default function Index({ posts }) {
   return (
@@ -15,9 +15,9 @@ export default function Index({ posts }) {
       </p>
       <ul>
         {posts.map((post) => (
-          <li key={post.filePath}>
+          <li key={post.slug}>
             <Link
-              as={`/posts/${post.filePath.replace(/\.mdx?$/, '')}`}
+              as={`/posts/${post.slug.replace(/\.mdx?$/, '')}`}
               href={`/posts/[slug]`}
             >
               <a>{post.data.title}</a>
@@ -26,20 +26,24 @@ export default function Index({ posts }) {
         ))}
       </ul>
     </Layout>
-  )
+  );
 }
 
 export function getStaticProps() {
-  const posts = postFilePaths.map((filePath) => {
-    const source = fs.readFileSync(path.join(POSTS_PATH, filePath))
-    const { content, data } = matter(source)
+  const posts = Object.entries(postFilePaths)
+    // Map the path into the static paths object required by Next.js
+    .map(([slug, locales]) => {
+      const filePath = `${slug}/${locales[0]}.mdx`;
+      const source = fs.readFileSync(path.join(POSTS_PATH, filePath));
+      const { content, data } = matter(source);
 
-    return {
-      content,
-      data,
-      filePath,
-    }
-  })
+      return {
+        content,
+        data,
+        slug,
+        locales,
+      };
+    });
 
-  return { props: { posts } }
+  return { props: { posts } };
 }
