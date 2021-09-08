@@ -88,7 +88,7 @@ export const getStaticProps = async ({ params }) => {
 
 export const getStaticPaths = async () => {
   const paths = Object.entries(postFilePaths)
-    // Map the path into the static paths object required by Next.js
+    // Make all cominations of locale and slug
     .reduce(
       (acc, [slug, locales]) => [
         ...acc,

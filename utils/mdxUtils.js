@@ -5,6 +5,7 @@ import glob from "glob";
 export const POSTS_PATH = path.join(process.cwd(), "posts");
 
 // postFilePaths is the list of all mdx files inside the POSTS_PATH directory
+// Return value will be an array for { "slug": [locales] } objects.
 export const postFilePaths = glob
   .sync(`${POSTS_PATH}/**/*.md?(x)`)
   .reduce((acc, p) => {

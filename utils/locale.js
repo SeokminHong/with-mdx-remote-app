@@ -1,14 +1,15 @@
 import { setCookie, parseCookies } from "nookies";
 
 export const locales = ["en", "ko"];
+export const defaultLocale = "en";
 
 export const getLocale = () => {
   if (typeof window === "undefined") {
     return null;
   }
   const storageLocale = localStorage.getItem("locale");
+  // e.g. en-US -> en
   const navLocale = window.navigator.language.substring(0, 2);
-  const defaultLocale = "en";
   return storageLocale || navLocale || defaultLocale;
 };
 

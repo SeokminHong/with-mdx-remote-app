@@ -1,5 +1,7 @@
 const locales = ["en", "ko"];
+const defaultLocale = "en";
 
+// Make all rewrites for locales
 const makeLocaleRewrite = (l) => ({
   source: "/posts/:slug*",
   has: [
@@ -14,6 +16,14 @@ const makeLocaleRewrite = (l) => ({
 
 module.exports = {
   async rewrites() {
-    return locales.map(makeLocaleRewrite);
+    return {
+      beforeFiles: locales.map(makeLocaleRewrite),
+      fallback: [
+        {
+          source: "/posts/:slug*",
+          destination: `/posts/:slug*/${defaultLocale}`,
+        },
+      ],
+    };
   },
 };
