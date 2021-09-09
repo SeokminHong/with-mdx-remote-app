@@ -1,11 +1,14 @@
 import fs from 'fs';
 import matter from 'gray-matter';
+import { InferGetStaticPropsType } from 'next';
 import Link from 'next/link';
 import path from 'path';
 import Layout from '../components/Layout';
 import { postFilePaths, POSTS_PATH } from '../utils/mdxUtils';
 
-export default function Index({ posts }) {
+export default function Index({
+  posts,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Layout>
       <h1>Home Page</h1>
@@ -16,10 +19,7 @@ export default function Index({ posts }) {
       <ul>
         {posts.map((post) => (
           <li key={post.slug}>
-            <Link
-              as={`/posts/${post.slug.replace(/\.mdx?$/, '')}`}
-              href={`/posts/[slug]`}
-            >
+            <Link as={`/posts/${post.slug}`} href={`/posts/[slug]`}>
               <a>{post.data.title}</a>
             </Link>
           </li>

@@ -1,3 +1,4 @@
+import React from "react";
 import { getNextLocale, setLocale } from "../utils/locale";
 
 const changeLocale = () => {
@@ -5,7 +6,7 @@ const changeLocale = () => {
   history.go(0);
 };
 
-export default function Layout({ children }) {
+export default function Layout({ children }: {children: React.ReactNode}) {
   return (
     <>
       <div>

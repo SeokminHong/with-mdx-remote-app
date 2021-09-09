@@ -1,14 +1,16 @@
-import fs from "fs";
-import matter from "gray-matter";
-import { MDXRemote } from "next-mdx-remote";
-import { serialize } from "next-mdx-remote/serialize";
-import dynamic from "next/dynamic";
-import Head from "next/head";
-import Link from "next/link";
-import path from "path";
-import CustomLink from "../../../components/CustomLink";
-import Layout from "../../../components/Layout";
-import { postFilePaths, POSTS_PATH } from "../../../utils/mdxUtils";
+import fs from 'fs';
+import matter from 'gray-matter';
+import { InferGetStaticPropsType, GetStaticProps } from 'next';
+import { MDXRemote } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import Link from 'next/link';
+import path from 'path';
+import CustomLink from '../../../components/CustomLink';
+import Layout from '../../../components/Layout';
+import { Locale } from '../../../utils/locale';
+import { postFilePaths, POSTS_PATH } from '../../../utils/mdxUtils';
 
 // Custom components/renderers to pass to MDX.
 // Since the MDX files aren't loaded by webpack, they have no knowledge of how
@@ -19,11 +21,14 @@ const components = {
   // It also works with dynamically-imported components, which is especially
   // useful for conditionally loading components for certain routes.
   // See the notes in README.md for more details.
-  TestComponent: dynamic(() => import("../../../components/TestComponent")),
+  TestComponent: dynamic(() => import('../../../components/TestComponent')),
   Head,
 };
 
-export default function PostPage({ source, frontMatter }) {
+export default function PostPage({
+  source,
+  frontMatter,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Layout>
       <header>
@@ -59,10 +64,12 @@ export default function PostPage({ source, frontMatter }) {
   );
 }
 
-export const getStaticProps = async ({ params }) => {
+type ParamType = { slug: string; locale: Locale };
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const postFilePath = path.join(
     POSTS_PATH,
-    `${params.slug}/${params.locale}.mdx`
+    `${params!.slug}/${params!.locale}.mdx`
   );
   const source = fs.readFileSync(postFilePath);
 
@@ -94,7 +101,7 @@ export const getStaticPaths = async () => {
         ...acc,
         ...locales.map((locale) => ({ params: { slug, locale } })),
       ],
-      []
+      [] as { params: ParamType }[]
     );
 
   return {
